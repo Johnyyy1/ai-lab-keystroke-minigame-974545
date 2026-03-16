@@ -1,0 +1,340 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keystroke Minigame</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .game-area {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .word-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-area {
+            margin-bottom: 25px;
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #user-input:focus {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        #user-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 120px;
+            margin: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff8a00, #e52e71);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #reset-btn {
+            background: linear-gradient(45deg, #00c9ff, #92fe9d);
+        }
+
+        .achievements {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .achievements h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            justify-items: center;
+        }
+
+        .achievement {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .achievement.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .achievement-name {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            min-height: 30px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #4ade80;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00c9ff, #92fe9d);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .instructions {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .instructions h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .word-display {
+                font-size: 2rem;
+            }
+            
+            .stat-box {
+                min-width: 100px;
+                padding: 10px;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-keyboard"></i> Keystroke Minigame</h1>
+        <p class="subtitle">Type the word as fast as you can!</p>
+        
+        <div class="game-area">
+            <div class="word-display" id="word-display">READY?</div>
+            
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Start typing..." autocomplete="off" disabled>
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="time-stat">0.00s</div>
+                    <div class="stat-label">TIME</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="wpm-stat">0</div>
+                    <div class="stat-label">WPM</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="accuracy-stat">0%</div>
+                    <div class="stat-label">ACCURACY</div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button id="start-btn"><i class="fas fa-play"></i> Start Game</button>
+                <button id="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+        </div>
+        
+        <div class="achievements">
+            <h2><i class="fas fa-trophy"></i> Achievements</h2>
+            <div class="achievements-grid" id="achievements-grid">
+                <!-- Achievements will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2><i class="fas fa-info-circle"></i> How to Play</h2>
+            <ul>
+                <li>Click "Start Game" to begin</li>
+                <li>Type the displayed word as quickly as possible</li>
+                <li>Press Enter or Space to submit your answer</li>
+                <li>Try to complete words with the fastest time and highest accuracy</li>
+                <li>Earn achievements for your performance!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
+```

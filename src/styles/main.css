@@ -1,0 +1,261 @@
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.game-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+.word-display {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 30px 0;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
+}
+
+.input-container {
+  margin: 30px 0;
+}
+
+.input-field {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.5rem;
+  border: 3px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.input-field:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+  background: white;
+}
+
+.input-field.correct {
+  border-color: #28a745;
+  background: #d4edda;
+}
+
+.input-field.incorrect {
+  border-color: #dc3545;
+  background: #f8d7da;
+}
+
+.timer {
+  font-size: 1.2rem;
+  margin: 20px 0;
+  color: #333;
+  font-weight: bold;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px;
+  min-width: 120px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.achievements-container {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.achievements-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.achievement-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.achievement-card.unlocked {
+  opacity: 1;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+}
+
+.achievement-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.achievement-name {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.achievement-desc {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 10px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.feedback {
+  margin: 20px 0;
+  min-height: 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.feedback.correct {
+  color: #28a745;
+}
+
+.feedback.incorrect {
+  color: #dc3545;
+}
+
+.feedback.info {
+  color: #667eea;
+}
+
+@media (max-width: 768px) {
+  .game-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .word-display {
+    font-size: 2rem;
+  }
+  
+  .input-field {
+    font-size: 1.2rem;
+    padding: 12px;
+  }
+  
+  .stat-box {
+    min-width: 100px;
+    padding: 10px;
+  }
+  
+  .stat-value {
+    font-size: 1.4rem;
+  }
+  
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+}
+```
