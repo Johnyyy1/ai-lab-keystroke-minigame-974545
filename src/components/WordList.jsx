@@ -109,9 +109,9 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
         <h2>Word List</h2>
         <input
           type="text"
+          placeholder="Search words..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search words..."
           className="search-input"
         />
       </div>

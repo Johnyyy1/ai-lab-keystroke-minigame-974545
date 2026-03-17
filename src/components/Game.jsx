@@ -252,9 +252,6 @@ const Game = () => {
             Start Test
           </button>
         )}
-        <button onClick={resetTest} className="btn">
-          Reset
-        </button>
       </div>
       
       {testCompleted && (
