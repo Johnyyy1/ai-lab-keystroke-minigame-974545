@@ -37,7 +37,7 @@ function Game() {
     );
   });
 
-  const sortedMoves = isAscending ? moves : moves.reverse();
+  const sortedMoves = isAscending ? moves : moves.slice().reverse();
 
   function calculateWinner(squares) {
     const lines = [
@@ -48,7 +48,7 @@ function Game() {
       [1, 4, 7],
       [2, 5, 8],
       [0, 4, 8],
-      [2, 4, 6],
+      [2, 4, 6]
     ];
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
@@ -64,7 +64,7 @@ function Game() {
   if (winner) {
     status = 'Winner: ' + winner;
   } else if (currentSquares.every(square => square !== null)) {
-    status = "It's a draw!";
+    status = 'Game tied';
   } else {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   }
@@ -77,7 +77,7 @@ function Game() {
       <div className="game-info">
         <div>{status}</div>
         <button onClick={toggleSort}>
-          Sort moves {isAscending ? '↑' : '↓'}
+          Sort {isAscending ? 'Descending' : 'Ascending'}
         </button>
         <ol>{sortedMoves}</ol>
       </div>
