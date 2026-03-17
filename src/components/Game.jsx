@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { create } from 'zustand';
+import { Provider } from 'zustand';
 import './Game.css';
 
 const useGameStore = create((set) => ({
@@ -43,6 +44,64 @@ const useGameStore = create((set) => ({
     currentCharIndex: 0
   })
 }));
+
+const Badges = () => {
+  const { wpm, accuracy, errors } = useGameStore();
+  
+  return (
+    <div className="achievements">
+      <h2>Achievements</h2>
+      <div className="badge-grid">
+        <div className={`badge ${wpm >= 60 ? 'earned' : ''}`}>
+          <span className="badge-icon">🚀</span>
+          <span className="badge-name">Speed Demon</span>
+          <span className="badge-desc">60+ WPM</span>
+        </div>
+        <div className={`badge ${accuracy >= 95 ? 'earned' : ''}`}>
+          <span className="badge-icon">🎯</span>
+          <span className="badge-name">Precision</span>
+          <span className="badge-desc">95%+ Accuracy</span>
+        </div>
+        <div className={`badge ${errors === 0 ? 'earned' : ''}`}>
+          <span className="badge-icon">💯</span>
+          <span className="badge-name">Perfectionist</span>
+          <span className="badge-desc">No Errors</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Leaderboard = () => {
+  const { wpm, accuracy, errors, testCompleted } = useGameStore();
+  
+  return (
+    <div className="leaderboard">
+      <h2>Leaderboard</h2>
+      <div className="leaderboard-item">
+        <span className="rank">1</span>
+        <span className="player-name">You</span>
+        <span className="player-stats">{wpm} WPM</span>
+        <span className="player-stats">{accuracy}% Acc</span>
+        <span className="player-stats">{errors} Errors</span>
+      </div>
+      <div className="leaderboard-item">
+        <span className="rank">2</span>
+        <span className="player-name">Player2</span>
+        <span className="player-stats">52 WPM</span>
+        <span className="player-stats">92% Acc</span>
+        <span className="player-stats">3 Errors</span>
+      </div>
+      <div className="leaderboard-item">
+        <span className="rank">3</span>
+        <span className="player-name">Player3</span>
+        <span className="player-stats">48 WPM</span>
+        <span className="player-stats">89% Acc</span>
+        <span className="player-stats">5 Errors</span>
+      </div>
+    </div>
+  );
+};
 
 const Game = () => {
   const {
@@ -209,6 +268,9 @@ const Game = () => {
           <p>Errors: {errors}</p>
         </div>
       )}
+      
+      <Badges />
+      <Leaderboard />
     </div>
   );
 };
