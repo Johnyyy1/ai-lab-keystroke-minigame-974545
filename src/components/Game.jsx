@@ -2,109 +2,117 @@ import React, { useState, useEffect } from 'react';
 import './Game.css';
 
 const Game = () => {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [isXNext, setIsXNext] = useState(true);
-  const [winner, setWinner] = useState(null);
-  const [scores, setScores] = useState({ X: 0, O: 0, draws: 0 });
+  const [userInput, setUserInput] = useState('');
+  const [targetText, setTargetText] = useState('');
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [isRunning, setIsRunning] = useState(false);
+  const [wpm, setWpm] = useState(0);
+  const [accuracy, setAccuracy] = useState(100);
+  const [testCompleted, setTestCompleted] = useState(false);
 
-  const winningCombinations = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-    [0, 4, 8], [2, 4, 6]             // diagonals
+  const sampleTexts = [
+    "The quick brown fox jumps over the lazy dog",
+    "Programming is the process of creating a set of instructions that tell a computer how to perform a task",
+    "React is a JavaScript library for building user interfaces",
+    "Frontend development involves creating the user interface of web applications",
+    "CSS is used to style and layout web pages"
   ];
 
-  const checkWinner = (squares) => {
-    for (let i = 0; i < winningCombinations.length; i++) {
-      const [a, b, c] = winningCombinations[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
-      }
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      const timer = setTimeout(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (isRunning && timeLeft === 0) {
+      setIsRunning(false);
+      setTestCompleted(true);
     }
-    return null;
-  };
+  }, [isRunning, timeLeft]);
 
-  const handleClick = (index) => {
-    if (board[index] || winner) return;
-
-    const newBoard = [...board];
-    newBoard[index] = isXNext ? 'X' : 'O';
-    setBoard(newBoard);
-
-    const newWinner = checkWinner(newBoard);
-    if (newWinner) {
-      setWinner(newWinner);
-      setScores(prev => ({
-        ...prev,
-        [newWinner]: prev[newWinner] + 1
-      }));
-    } else if (newBoard.every(square => square !== null)) {
-      setWinner('draw');
-      setScores(prev => ({
-        ...prev,
-        draws: prev.draws + 1
-      }));
-    } else {
-      setIsXNext(!isXNext);
+  useEffect(() => {
+    if (!testCompleted && userInput.length > 0) {
+      const correctChars = userInput.split('').filter((char, index) => char === targetText[index]).length;
+      const accuracy = Math.round((correctChars / userInput.length) * 100);
+      setAccuracy(accuracy);
+      
+      const wordsTyped = userInput.trim().split(/\s+/).length;
+      const minutes = (60 - timeLeft) / 60;
+      const calculatedWpm = Math.round(wordsTyped / minutes) || 0;
+      setWpm(calculatedWpm);
     }
+  }, [userInput, timeLeft, testCompleted, targetText]);
+
+  const startTest = () => {
+    const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+    setTargetText(randomText);
+    setUserInput('');
+    setTimeLeft(60);
+    setIsRunning(true);
+    setTestCompleted(false);
+    setWpm(0);
+    setAccuracy(100);
   };
 
-  const resetGame = () => {
-    setBoard(Array(9).fill(null));
-    setIsXNext(true);
-    setWinner(null);
+  const handleInputChange = (e) => {
+    if (!isRunning && !testCompleted) return;
+    setUserInput(e.target.value);
   };
 
-  const resetScores = () => {
-    setScores({ X: 0, O: 0, draws: 0 });
-    resetGame();
-  };
-
-  const renderSquare = (index) => {
-    return (
-      <button
-        className={`square ${board[index] ? 'filled' : ''}`}
-        onClick={() => handleClick(index)}
-        disabled={!!board[index] || !!winner}
-      >
-        {board[index]}
-      </button>
-    );
-  };
-
-  const getStatusMessage = () => {
-    if (winner === 'draw') return "It's a draw!";
-    if (winner) return `Winner: ${winner}`;
-    return `Next player: ${isXNext ? 'X' : 'O'}`;
+  const resetTest = () => {
+    setUserInput('');
+    setTimeLeft(60);
+    setIsRunning(false);
+    setTestCompleted(false);
+    setWpm(0);
+    setAccuracy(100);
   };
 
   return (
     <div className="game">
-      <h1>Tic Tac Toe</h1>
-      <div className="status">{getStatusMessage()}</div>
-      <div className="board">
-        {Array(3).fill(null).map((_, row) => (
-          <div key={row} className="board-row">
-            {Array(3).fill(null).map((_, col) => (
-              <div key={col}>
-                {renderSquare(row * 3 + col)}
-              </div>
-            ))}
-          </div>
-        ))}
+      <h1>Typing Speed Test</h1>
+      <div className="stats">
+        <div className="stat">Time: <span className={timeLeft <= 10 ? 'warning' : ''}>{timeLeft}s</span></div>
+        <div className="stat">WPM: {wpm}</div>
+        <div className="stat">Accuracy: {accuracy}%</div>
       </div>
+      
+      <div className="text-display">
+        <p>{targetText}</p>
+      </div>
+      
+      <textarea
+        className="input-area"
+        value={userInput}
+        onChange={handleInputChange}
+        placeholder={testCompleted ? "Test completed! Click 'New Test' to start again." : "Start typing here..."}
+        disabled={!isRunning && !testCompleted}
+        rows="4"
+      />
+      
       <div className="controls">
-        <button onClick={resetGame} className="reset-btn">
-          New Game
-        </button>
-        <button onClick={resetScores} className="reset-scores-btn">
-          Reset Scores
+        {!isRunning && !testCompleted && (
+          <button onClick={startTest} className="start-btn">
+            Start Test
+          </button>
+        )}
+        {testCompleted && (
+          <button onClick={startTest} className="new-test-btn">
+            New Test
+          </button>
+        )}
+        <button onClick={resetTest} className="reset-btn">
+          Reset
         </button>
       </div>
-      <div className="scores">
-        <div>X: {scores.X}</div>
-        <div>O: {scores.O}</div>
-        <div>Draws: {scores.draws}</div>
-      </div>
+      
+      {testCompleted && (
+        <div className="results">
+          <h2>Test Results</h2>
+          <p>Words Per Minute: {wpm}</p>
+          <p>Accuracy: {accuracy}%</p>
+        </div>
+      )}
     </div>
   );
 };
