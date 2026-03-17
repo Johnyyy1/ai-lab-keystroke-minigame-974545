@@ -114,7 +114,7 @@ export const checkAchievements = (game, games) => {
   const unlockedAchievements = [];
   
   Object.values(ACHIEVEMENTS).forEach(achievement => {
-    if (achievement.condition(game, games) && !games.find(g => g.achievements?.includes(achievement.id))) {
+    if (achievement.condition(game, games) && !games.some(g => g.achievements?.includes(achievement.id))) {
       unlockedAchievements.push(achievement);
     }
   });
