@@ -10,6 +10,7 @@ A React-based typing speed challenge game where players must complete words as q
 - Achievement unlocking based on gameplay
 - Responsive design for all devices
 - Performance statistics and history tracking
+- Local storage persistence for game data
 
 ## Installation
 
@@ -78,6 +79,19 @@ npm start
 - Badge and achievement progress
 - Game session history
 
+### State Management Library
+This application uses **Zustand** for efficient state management:
+- Global game state (current word, input, timer)
+- Performance metrics and history tracking
+- Badge and achievement progress
+- Session management
+
+### Persistence Layer
+Game data is persisted using:
+- **Local Storage**: Stores user progress, achievements, and history
+- **Session Management**: Maintains game state between sessions
+- **Data Migration**: Handles updates to game data structure
+
 ### Styling
 - Responsive CSS grid layout
 - Animated transitions for feedback
@@ -103,6 +117,8 @@ src/
 │   ├── StatsPanel.js
 │   ├── BadgesPanel.js
 │   └── HistoryPanel.js
+├── store/
+│   └── useGameStore.js
 ├── assets/
 │   └── words.js
 ├── styles/
