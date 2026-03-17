@@ -254,15 +254,6 @@ const Game = () => {
         )}
       </div>
       
-      {testCompleted && (
-        <div className="results">
-          <h2>Test Results</h2>
-          <p>Words Per Minute: {wpm}</p>
-          <p>Accuracy: {accuracy}%</p>
-          <p>Errors: {errors}</p>
-        </div>
-      )}
-      
       <Badges />
       <Leaderboard />
     </div>
