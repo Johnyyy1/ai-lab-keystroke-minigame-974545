@@ -8,47 +8,37 @@ const Leaderboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulate fetching scores from localStorage or API
-    const fetchScores = () => {
+    const fetchScores = async () => {
       try {
         const storedScores = localStorage.getItem('keystrokeScores');
         if (storedScores) {
           const parsedScores = JSON.parse(storedScores);
           setScores(parsedScores);
-        } else {
-          // Fetch from API or other data source instead of hardcoded mock data
-          // This is a placeholder for actual data fetching logic
-          fetch('/api/scores')
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
-            })
-            .then(data => {
-              setScores(data);
-              localStorage.setItem('keystrokeScores', JSON.stringify(data));
-            })
-            .catch(error => {
-              console.error('Failed to fetch scores:', error);
-              // Fallback to mock data if API fails
-              const mockScores = [
-                { id: 1, name: 'Alex Johnson', time: 12.4, date: '2023-05-15', word: 'javascript' },
-                { id: 2, name: 'Sam Smith', time: 14.2, date: '2023-05-14', word: 'react' },
-                { id: 3, name: 'Taylor Brown', time: 15.7, date: '2023-05-13', word: 'component' },
-                { id: 4, name: 'Jordan Lee', time: 16.3, date: '2023-05-12', word: 'function' },
-                { id: 5, name: 'Casey Davis', time: 17.8, date: '2023-05-11', word: 'state' },
-              ];
-              setScores(mockScores);
-              localStorage.setItem('keystrokeScores', JSON.stringify(mockScores));
-            })
-            .finally(() => setLoading(false));
+          setLoading(false);
           return;
         }
+
+        // Fetch from API
+        const response = await fetch('/api/scores');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setScores(data);
+        localStorage.setItem('keystrokeScores', JSON.stringify(data));
         setLoading(false);
-      } catch (err) {
-        console.error('Error parsing scores from localStorage:', err);
-        setError('Failed to load scores. Please try again later.');
+      } catch (error) {
+        console.error('Failed to fetch scores:', error);
+        // Fallback to mock data if API fails
+        const mockScores = [
+          { id: 1, name: 'Alex Johnson', time: 12.4, date: '2023-05-15', word: 'javascript' },
+          { id: 2, name: 'Sam Smith', time: 14.2, date: '2023-05-14', word: 'react' },
+          { id: 3, name: 'Taylor Brown', time: 15.7, date: '2023-05-13', word: 'component' },
+          { id: 4, name: 'Jordan Lee', time: 16.3, date: '2023-05-12', word: 'function' },
+          { id: 5, name: 'Casey Davis', time: 17.8, date: '2023-05-11', word: 'state' },
+        ];
+        setScores(mockScores);
+        localStorage.setItem('keystrokeScores', JSON.stringify(mockScores));
         setLoading(false);
       }
     };

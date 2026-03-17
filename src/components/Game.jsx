@@ -102,6 +102,32 @@ const Leaderboard = () => {
   );
 };
 
+const WordList = () => {
+  const { targetText, userInput, currentCharIndex } = useGameStore();
+  
+  const words = targetText.split(' ');
+  const userInputWords = userInput.split(' ');
+  
+  return (
+    <div className="word-list">
+      <h2>Words</h2>
+      <div className="words-container">
+        {words.map((word, wordIndex) => (
+          <span 
+            key={wordIndex} 
+            className={`word ${wordIndex < userInputWords.length ? 'typed' : ''} ${
+              wordIndex === Math.floor(userInputWords.length - 1) && 
+              userInputWords[wordIndex] !== word ? 'error' : ''
+            }`}
+          >
+            {word}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const Game = () => {
   const {
     userInput,
@@ -236,23 +262,44 @@ const Game = () => {
         <div className="stat">Errors: {errors}</div>
       </div>
       
-      <div className="text-display">
-        {targetText.split('').map((char, index) => (
-          <span 
-            key={index} 
-            className={getCharacterClass(index)}
-          >
-            {char}
-          </span>
-        ))}
-      </div>
-      
-      <div className="controls">
-        {testCompleted ? (
-          <button onClick={startTest}>Restart Test</button>
-        ) : (
-          <button onClick={startTest}>Start Test</button>
-        )}
+      <div className="content-wrapper">
+        <div className="main-content">
+          <div className="text-display">
+            {targetText.split('').map((char, index) => (
+              <span 
+                key={index} 
+                className={index < userInput.length ? 
+                  (char === userInput[index] ? 'correct' : 'incorrect') : 
+                  (index === currentCharIndex ? 'cursor' : '')}
+              >
+                {char}
+              </span>
+            ))}
+          </div>
+          
+          <textarea
+            ref={inputRef}
+            value={userInput}
+            onChange={handleInputChange}
+            className="input-area"
+            placeholder="Start typing here..."
+            disabled={!isRunning && !testCompleted}
+          />
+          
+          <div className="controls">
+            <button onClick={startTest}>
+              {testCompleted ? 'Restart Test' : 'Start Test'}
+            </button>
+            {testCompleted && (
+              <button onClick={resetTest}>Reset</button>
+            )}
+          </div>
+        </div>
+        
+        <div className="sidebar">
+          <Badges />
+          <WordList />
+        </div>
       </div>
     </div>
   );
