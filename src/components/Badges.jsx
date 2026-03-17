@@ -1,4 +1,3 @@
-```javascript
 import React from 'react';
 import './Badges.css';
 
@@ -125,4 +124,3 @@ const Badges = ({ badges, achievements }) => {
 };
 
 export default Badges;
-```

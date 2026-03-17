@@ -1,4 +1,3 @@
-```javascript
 export const BADGES = {
   FIRST_TIME: {
     id: 'FIRST_TIME',
@@ -160,4 +159,3 @@ export const BADGE_CATEGORIES = {
 
 export const BADGE_UNLOCKED_EVENT = 'badge_unlocked';
 export const ACHIEVEMENT_UNLOCKED_EVENT = 'achievement_unlocked';
-```

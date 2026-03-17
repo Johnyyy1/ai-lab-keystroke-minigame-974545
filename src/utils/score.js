@@ -1,4 +1,3 @@
-```javascript
 export const calculateTime = (startTime, endTime) => {
   return Math.round((endTime - startTime) / 1000);
 };
@@ -89,4 +88,3 @@ export const getDifficultyLevel = (time, accuracy) => {
   if (time <= 20 && accuracy >= 80) return 'Beginner';
   return 'Novice';
 };
-```

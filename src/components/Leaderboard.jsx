@@ -1,4 +1,3 @@
-```javascript
 import React, { useState, useEffect } from 'react';
 import './Leaderboard.css';
 
@@ -114,4 +113,3 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
-```

@@ -1,4 +1,3 @@
-```javascript
 export const saveGameProgress = (progress) => {
   try {
     localStorage.setItem('keystrokeMinigameProgress', JSON.stringify(progress));
@@ -72,4 +71,3 @@ export const loadSessionStats = () => {
     return { gamesPlayed: 0, totalTime: 0, bestTime: Infinity };
   }
 };
-```

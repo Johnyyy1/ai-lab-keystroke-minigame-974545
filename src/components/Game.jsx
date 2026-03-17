@@ -1,4 +1,3 @@
-```javascript
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getWords } from '../utils/wordList';
@@ -78,6 +77,12 @@ const Game = () => {
     }
   }, [gameStatus]);
 
+  useEffect(() => {
+    if (inputRef.current && gameStatus === 'playing') {
+      inputRef.current.focus();
+    }
+  }, [gameStatus, currentWord]);
+
   const startNewGame = () => {
     const randomWord = words[Math.floor(Math.random() * words.length)];
     setCurrentWord(randomWord);
@@ -128,8 +133,12 @@ const Game = () => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && gameStatus === 'waiting') {
-      startNewGame();
+    if (e.key === 'Enter') {
+      if (gameStatus === 'waiting') {
+        startNewGame();
+      } else if (gameStatus === 'playing' && userInput === currentWord) {
+        handleWordComplete();
+      }
     }
   };
 
@@ -212,7 +221,6 @@ const Game = () => {
               onKeyPress={handleKeyPress}
               className="input-field"
               disabled={gameStatus !== 'playing'}
-              autoFocus
             />
             
             <div className="progress-bar">
@@ -255,7 +263,7 @@ const Game = () => {
           {badges.length > 0 ? (
             badges.map((badge, index) => (
               <div key={index} className="badge-item">
-                <span className="badge-icon">⭐</span>
+                <span className="badge-icon">🏆</span>
                 <span className="badge-name">{badge.name}</span>
               </div>
             ))
@@ -269,4 +277,3 @@ const Game = () => {
 };
 
 export default Game;
-```

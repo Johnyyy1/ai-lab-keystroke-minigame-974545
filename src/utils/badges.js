@@ -1,4 +1,3 @@
-```javascript
 export const BADGES = {
   FIRST_TIME: {
     id: 'FIRST_TIME',
@@ -199,4 +198,3 @@ export const getBadgeIcon = (badgeId) => {
   const badge = Object.values(BADGES).find(b => b.id === badgeId);
   return badge ? badge.icon : '🏆';
 };
-```

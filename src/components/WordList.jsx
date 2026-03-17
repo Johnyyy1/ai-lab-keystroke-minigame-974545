@@ -1,4 +1,3 @@
-```javascript
 import React, { useState, useEffect } from 'react';
 
 const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
@@ -143,4 +142,3 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
 };
 
 export default WordList;
-```

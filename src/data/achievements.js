@@ -1,4 +1,3 @@
-```javascript
 export const ACHIEVEMENTS = [
   {
     id: 'first-word',
@@ -122,4 +121,3 @@ export const ACHIEVEMENT_CATEGORIES = [
   { id: 'accuracy', name: 'Accuracy', icon: '🎯' },
   { id: 'consistency', name: 'Consistency', icon: '📅' }
 ];
-```

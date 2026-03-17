@@ -1,4 +1,3 @@
-```javascript
 export const WORDS = [
   "apple",
   "banana",
