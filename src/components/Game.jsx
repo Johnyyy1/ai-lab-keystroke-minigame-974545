@@ -247,15 +247,6 @@ const Game = () => {
         ))}
       </div>
       
-      <textarea
-        ref={inputRef}
-        className="input-area"
-        value={userInput}
-        onChange={handleInputChange}
-        placeholder={testCompleted ? "Test completed! Click 'New Test' to start again." : "Start typing here..."}
-        disabled={!isRunning && !testCompleted}
-      />
-      
       <div className="controls">
         {testCompleted ? (
           <button onClick={startTest}>Restart Test</button>
