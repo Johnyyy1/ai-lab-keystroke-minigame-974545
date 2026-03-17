@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Game.css';
 
 const Game = () => {
@@ -9,6 +9,10 @@ const Game = () => {
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
   const [testCompleted, setTestCompleted] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [errors, setErrors] = useState(0);
+  const [currentCharIndex, setCurrentCharIndex] = useState(0);
+  const inputRef = useRef(null);
 
   const sampleTexts = [
     "The quick brown fox jumps over the lazy dog",
@@ -52,11 +56,33 @@ const Game = () => {
     setTestCompleted(false);
     setWpm(0);
     setAccuracy(100);
+    setErrors(0);
+    setCurrentCharIndex(0);
+    setStartTime(Date.now());
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
   };
 
   const handleInputChange = (e) => {
     if (!isRunning && !testCompleted) return;
-    setUserInput(e.target.value);
+    
+    const value = e.target.value;
+    setUserInput(value);
+    
+    // Calculate errors
+    let errorCount = 0;
+    for (let i = 0; i < value.length; i++) {
+      if (i < targetText.length && value[i] !== targetText[i]) {
+        errorCount++;
+      }
+    }
+    setErrors(errorCount);
+    
+    // Update current character index
+    setCurrentCharIndex(value.length);
   };
 
   const resetTest = () => {
@@ -66,6 +92,18 @@ const Game = () => {
     setTestCompleted(false);
     setWpm(0);
     setAccuracy(100);
+    setErrors(0);
+    setCurrentCharIndex(0);
+    setStartTime(null);
+  };
+
+  const getCharacterClass = (index) => {
+    if (index < userInput.length) {
+      return userInput[index] === targetText[index] ? 'correct' : 'incorrect';
+    } else if (index === currentCharIndex) {
+      return 'cursor';
+    }
+    return '';
   };
 
   return (
@@ -75,13 +113,22 @@ const Game = () => {
         <div className="stat">Time: <span className={timeLeft <= 10 ? 'warning' : ''}>{timeLeft}s</span></div>
         <div className="stat">WPM: {wpm}</div>
         <div className="stat">Accuracy: {accuracy}%</div>
+        <div className="stat">Errors: {errors}</div>
       </div>
       
       <div className="text-display">
-        <p>{targetText}</p>
+        {targetText.split('').map((char, index) => (
+          <span 
+            key={index} 
+            className={getCharacterClass(index)}
+          >
+            {char}
+          </span>
+        ))}
       </div>
       
       <textarea
+        ref={inputRef}
         className="input-area"
         value={userInput}
         onChange={handleInputChange}
@@ -111,6 +158,7 @@ const Game = () => {
           <h2>Test Results</h2>
           <p>Words Per Minute: {wpm}</p>
           <p>Accuracy: {accuracy}%</p>
+          <p>Errors: {errors}</p>
         </div>
       )}
     </div>
