@@ -109,9 +109,9 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
         <h2>Word List</h2>
         <input
           type="text"
-          placeholder="Search words..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search words..."
           className="search-input"
         />
       </div>
@@ -130,9 +130,15 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
         ))}
       </div>
       
-      {filteredWords.length === 0 && (
+      {filteredWords.length === 0 && searchTerm && (
         <div className="no-results">
           No words found matching "{searchTerm}"
+        </div>
+      )}
+      
+      {filteredWords.length === 0 && !searchTerm && (
+        <div className="no-results">
+          No words available
         </div>
       )}
     </div>
