@@ -226,41 +226,12 @@ const Game = () => {
 
         {gameStatus === 'completed' && (
           <div className="completed-screen">
-            <h2>Completed!</h2>
-            <p>Word: <strong>{currentWord}</strong></p>
-            <p>Time: <strong>{formatTime(time)}</strong></p>
-            <p>WPM: <strong>{wpm}</strong></p>
-            <p>Accuracy: <strong>{accuracy}%</strong></p>
-            <p>Streak: <strong>{streak}</strong></p>
+            <h2>Game Completed!</h2>
+            <p>Final Score: {wpm} WPM</p>
+            <p>Streak: {streak}</p>
           </div>
         )}
       </div>
-
-      <div className="game-footer">
-        <button onClick={resetGame} className="reset-button">
-          Reset Game
-        </button>
-      </div>
-
-      {showAchievement && (
-        <div className="achievement-popup">
-          <div className="achievement-content">
-            <h3>Achievement Unlocked!</h3>
-            <p>{showAchievement.name}</p>
-            <p>{showAchievement.description}</p>
-          </div>
-        </div>
-      )}
-
-      {showBadge && (
-        <div className="badge-popup">
-          <div className="badge-content">
-            <h3>Badge Earned!</h3>
-            <p>{showBadge.name}</p>
-            <p>{showBadge.description}</p>
-          </div>
-        </div>
-      )}
 
       <div className="achievements-section">
         <h3>Achievements</h3>
