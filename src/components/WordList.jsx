@@ -37,9 +37,7 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
     'focus-visible', 'any-link', 'link', 'visited', 'enabled', 'disabled',
     'checked', 'indeterminate', 'valid', 'invalid', 'in-range', 'out-of-range',
     'required', 'optional', 'read-only', 'read-write', 'empty', 'blank',
-    'default', 'valid', 'invalid', 'in-range', 'out-of-range', 'required',
-    'optional', 'read-only', 'read-write', 'empty', 'blank', 'default',
-    'autofocus', 'form', 'formaction', 'formmethod', 'formnovalidate',
+    'default', 'autofocus', 'form', 'formaction', 'formmethod', 'formnovalidate',
     'formtarget', 'name', 'value', 'type', 'placeholder', 'maxlength',
     'minlength', 'pattern', 'step', 'min', 'max', 'size', 'multiple',
     'accept', 'autocomplete', 'autocorrect', 'autocapitalize', 'spellcheck',
@@ -108,13 +106,13 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
   return (
     <div className="word-list-container">
       <div className="word-list-header">
-        <h2>Available Words</h2>
+        <h2>Word List</h2>
         <input
           type="text"
           placeholder="Search words..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="word-search-input"
+          className="search-input"
         />
       </div>
       
