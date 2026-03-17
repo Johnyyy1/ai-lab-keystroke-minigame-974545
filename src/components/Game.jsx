@@ -212,6 +212,20 @@ const Game = () => {
     return '';
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isRunning && !testCompleted) return;
+      
+      if (e.key === 'Backspace' && userInput.length > 0) {
+        setUserInput(prev => prev.slice(0, -1));
+        setCurrentCharIndex(prev => Math.max(0, prev - 1));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [userInput, isRunning, testCompleted]);
+
   return (
     <div className="game">
       <h1>Typing Speed Test</h1>
@@ -244,18 +258,11 @@ const Game = () => {
       
       <div className="controls">
         {testCompleted ? (
-          <button onClick={startTest} className="btn">
-            New Test
-          </button>
+          <button onClick={startTest}>Restart Test</button>
         ) : (
-          <button onClick={startTest} className="btn">
-            Start Test
-          </button>
+          <button onClick={startTest}>Start Test</button>
         )}
       </div>
-      
-      <Badges />
-      <Leaderboard />
     </div>
   );
 };
