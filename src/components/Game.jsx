@@ -1,88 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import Board from './Board';
 import './Game.css';
 
-function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [currentMove, setCurrentMove] = useState(0);
-  const [isAscending, setIsAscending] = useState(true);
-  const xIsNext = currentMove % 2 === 0;
-  const currentSquares = history[currentMove];
+const Game = () => {
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [isXNext, setIsXNext] = useState(true);
+  const [winner, setWinner] = useState(null);
+  const [scores, setScores] = useState({ X: 0, O: 0, draws: 0 });
 
-  function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
-    setCurrentMove(nextHistory.length - 1);
-  }
+  const winningCombinations = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+    [0, 4, 8], [2, 4, 6]             // diagonals
+  ];
 
-  function jumpTo(nextMove) {
-    setCurrentMove(nextMove);
-  }
-
-  function toggleSort() {
-    setIsAscending(!isAscending);
-  }
-
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = `Go to move #${move}`;
-    } else {
-      description = 'Go to game start';
-    }
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
-    );
-  });
-
-  const sortedMoves = isAscending ? moves : moves.slice().reverse();
-
-  function calculateWinner(squares) {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6]
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
+  const checkWinner = (squares) => {
+    for (let i = 0; i < winningCombinations.length; i++) {
+      const [a, b, c] = winningCombinations[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
         return squares[a];
       }
     }
     return null;
-  }
+  };
 
-  const winner = calculateWinner(currentSquares);
-  let status;
-  if (winner) {
-    status = 'Winner: ' + winner;
-  } else if (currentSquares.every(square => square !== null)) {
-    status = 'Game tied';
-  } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-  }
+  const handleClick = (index) => {
+    if (board[index] || winner) return;
+
+    const newBoard = [...board];
+    newBoard[index] = isXNext ? 'X' : 'O';
+    setBoard(newBoard);
+
+    const newWinner = checkWinner(newBoard);
+    if (newWinner) {
+      setWinner(newWinner);
+      setScores(prev => ({
+        ...prev,
+        [newWinner]: prev[newWinner] + 1
+      }));
+    } else if (newBoard.every(square => square !== null)) {
+      setWinner('draw');
+      setScores(prev => ({
+        ...prev,
+        draws: prev.draws + 1
+      }));
+    } else {
+      setIsXNext(!isXNext);
+    }
+  };
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setIsXNext(true);
+    setWinner(null);
+  };
+
+  const resetScores = () => {
+    setScores({ X: 0, O: 0, draws: 0 });
+    resetGame();
+  };
+
+  const renderSquare = (index) => {
+    return (
+      <button
+        className={`square ${board[index] ? 'filled' : ''}`}
+        onClick={() => handleClick(index)}
+        disabled={!!board[index] || !!winner}
+      >
+        {board[index]}
+      </button>
+    );
+  };
+
+  const getStatusMessage = () => {
+    if (winner === 'draw') return "It's a draw!";
+    if (winner) return `Winner: ${winner}`;
+    return `Next player: ${isXNext ? 'X' : 'O'}`;
+  };
 
   return (
     <div className="game">
-      <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      <h1>Tic Tac Toe</h1>
+      <div className="status">{getStatusMessage()}</div>
+      <div className="board">
+        {Array(3).fill(null).map((_, row) => (
+          <div key={row} className="board-row">
+            {Array(3).fill(null).map((_, col) => (
+              <div key={col}>
+                {renderSquare(row * 3 + col)}
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
-      <div className="game-info">
-        <div>{status}</div>
-        <button onClick={toggleSort}>
-          Sort {isAscending ? 'Descending' : 'Ascending'}
+      <div className="controls">
+        <button onClick={resetGame} className="reset-btn">
+          New Game
         </button>
-        <ol>{sortedMoves}</ol>
+        <button onClick={resetScores} className="reset-scores-btn">
+          Reset Scores
+        </button>
+      </div>
+      <div className="scores">
+        <div>X: {scores.X}</div>
+        <div>O: {scores.O}</div>
+        <div>Draws: {scores.draws}</div>
       </div>
     </div>
   );
-}
+};
 
 export default Game;

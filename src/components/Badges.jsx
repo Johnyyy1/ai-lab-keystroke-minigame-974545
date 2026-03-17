@@ -46,7 +46,7 @@ const Badges = ({ badges, achievements }) => {
       description: 'Earn 5 badges', 
       icon: '🏅' 
     },
-    'speed- demon': { 
+    'speed-demon': { 
       name: 'Speed Demon', 
       description: 'Complete 10 words under 8 seconds', 
       icon: '🚀' 
