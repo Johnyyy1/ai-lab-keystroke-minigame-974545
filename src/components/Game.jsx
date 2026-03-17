@@ -1,26 +1,76 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { create } from 'zustand';
 import './Game.css';
 
-const Game = () => {
-  const [userInput, setUserInput] = useState('');
-  const [targetText, setTargetText] = useState('');
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [isRunning, setIsRunning] = useState(false);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
-  const [testCompleted, setTestCompleted] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [errors, setErrors] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const inputRef = useRef(null);
-
-  const sampleTexts = [
+const useGameStore = create((set) => ({
+  userInput: '',
+  targetText: '',
+  timeLeft: 60,
+  isRunning: false,
+  wpm: 0,
+  accuracy: 100,
+  testCompleted: false,
+  startTime: null,
+  errors: 0,
+  currentCharIndex: 0,
+  sampleTexts: [
     "The quick brown fox jumps over the lazy dog",
     "Programming is the process of creating a set of instructions that tell a computer how to perform a task",
     "React is a JavaScript library for building user interfaces",
     "Frontend development involves creating the user interface of web applications",
     "CSS is used to style and layout web pages"
-  ];
+  ],
+  setUserInput: (userInput) => set({ userInput }),
+  setTargetText: (targetText) => set({ targetText }),
+  setTimeLeft: (timeLeft) => set({ timeLeft }),
+  setIsRunning: (isRunning) => set({ isRunning }),
+  setWpm: (wpm) => set({ wpm }),
+  setAccuracy: (accuracy) => set({ accuracy }),
+  setTestCompleted: (testCompleted) => set({ testCompleted }),
+  setStartTime: (startTime) => set({ startTime }),
+  setErrors: (errors) => set({ errors }),
+  setCurrentCharIndex: (currentCharIndex) => set({ currentCharIndex }),
+  resetStore: () => set({
+    userInput: '',
+    targetText: '',
+    timeLeft: 60,
+    isRunning: false,
+    wpm: 0,
+    accuracy: 100,
+    testCompleted: false,
+    startTime: null,
+    errors: 0,
+    currentCharIndex: 0
+  })
+}));
+
+const Game = () => {
+  const {
+    userInput,
+    targetText,
+    timeLeft,
+    isRunning,
+    wpm,
+    accuracy,
+    testCompleted,
+    startTime,
+    errors,
+    currentCharIndex,
+    setUserInput,
+    setTargetText,
+    setTimeLeft,
+    setIsRunning,
+    setWpm,
+    setAccuracy,
+    setTestCompleted,
+    setStartTime,
+    setErrors,
+    setCurrentCharIndex,
+    resetStore,
+    sampleTexts
+  } = useGameStore();
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -86,15 +136,7 @@ const Game = () => {
   };
 
   const resetTest = () => {
-    setUserInput('');
-    setTimeLeft(60);
-    setIsRunning(false);
-    setTestCompleted(false);
-    setWpm(0);
-    setAccuracy(100);
-    setErrors(0);
-    setCurrentCharIndex(0);
-    setStartTime(null);
+    resetStore();
   };
 
   const getCharacterClass = (index) => {
