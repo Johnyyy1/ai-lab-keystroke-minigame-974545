@@ -241,21 +241,19 @@ const Game = () => {
         onChange={handleInputChange}
         placeholder={testCompleted ? "Test completed! Click 'New Test' to start again." : "Start typing here..."}
         disabled={!isRunning && !testCompleted}
-        rows="4"
       />
       
       <div className="controls">
-        {!isRunning && !testCompleted && (
-          <button onClick={startTest} className="start-btn">
+        {testCompleted ? (
+          <button onClick={startTest} className="btn btn-primary">
+            Start New Test
+          </button>
+        ) : (
+          <button onClick={startTest} className="btn btn-primary">
             Start Test
           </button>
         )}
-        {testCompleted && (
-          <button onClick={startTest} className="new-test-btn">
-            New Test
-          </button>
-        )}
-        <button onClick={resetTest} className="reset-btn">
+        <button onClick={resetTest} className="btn btn-secondary">
           Reset
         </button>
       </div>

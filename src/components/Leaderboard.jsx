@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useStore } from '../store/useStore';
 import './Leaderboard.css';
 
 const Leaderboard = () => {
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userRank, setUserRank] = useState(null);
+  const { keystrokeScores } = useStore();
 
   useEffect(() => {
     // Simulate fetching scores from localStorage or API
@@ -40,6 +42,13 @@ const Leaderboard = () => {
       setUserRank(rank);
     }
   }, [scores]);
+
+  useEffect(() => {
+    // Update scores when store changes
+    if (keystrokeScores.length > 0) {
+      setScores(keystrokeScores);
+    }
+  }, [keystrokeScores]);
 
   const formatTime = (time) => {
     return time.toFixed(1) + 's';
