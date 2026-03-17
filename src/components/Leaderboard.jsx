@@ -14,16 +14,29 @@ const Leaderboard = () => {
         const parsedScores = JSON.parse(storedScores);
         setScores(parsedScores);
       } else {
-        // Default mock data
-        const mockScores = [
-          { id: 1, name: 'Alex Johnson', time: 12.4, date: '2023-05-15', word: 'javascript' },
-          { id: 2, name: 'Sam Smith', time: 14.2, date: '2023-05-14', word: 'react' },
-          { id: 3, name: 'Taylor Brown', time: 15.7, date: '2023-05-13', word: 'component' },
-          { id: 4, name: 'Jordan Lee', time: 16.3, date: '2023-05-12', word: 'function' },
-          { id: 5, name: 'Casey Davis', time: 17.8, date: '2023-05-11', word: 'state' },
-        ];
-        setScores(mockScores);
-        localStorage.setItem('keystrokeScores', JSON.stringify(mockScores));
+        // Fetch from API or other data source instead of hardcoded mock data
+        // This is a placeholder for actual data fetching logic
+        fetch('/api/scores')
+          .then(response => response.json())
+          .then(data => {
+            setScores(data);
+            localStorage.setItem('keystrokeScores', JSON.stringify(data));
+          })
+          .catch(error => {
+            console.error('Failed to fetch scores:', error);
+            // Fallback to mock data if API fails
+            const mockScores = [
+              { id: 1, name: 'Alex Johnson', time: 12.4, date: '2023-05-15', word: 'javascript' },
+              { id: 2, name: 'Sam Smith', time: 14.2, date: '2023-05-14', word: 'react' },
+              { id: 3, name: 'Taylor Brown', time: 15.7, date: '2023-05-13', word: 'component' },
+              { id: 4, name: 'Jordan Lee', time: 16.3, date: '2023-05-12', word: 'function' },
+              { id: 5, name: 'Casey Davis', time: 17.8, date: '2023-05-11', word: 'state' },
+            ];
+            setScores(mockScores);
+            localStorage.setItem('keystrokeScores', JSON.stringify(mockScores));
+          })
+          .finally(() => setLoading(false));
+        return;
       }
       setLoading(false);
     };

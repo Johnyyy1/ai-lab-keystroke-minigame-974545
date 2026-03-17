@@ -103,10 +103,35 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
     }
   };
 
+  const getRandomWord = () => {
+    if (filteredWords.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredWords.length);
+      return filteredWords[randomIndex];
+    }
+    return null;
+  };
+
+  const selectRandomWord = () => {
+    const randomWord = getRandomWord();
+    if (randomWord) {
+      onWordSelect(randomWord);
+    }
+  };
+
   return (
-    <div className="word-list-container">
+    <div className="word-list">
       <div className="word-list-header">
-        <h2>Word List</h2>
+        <h3>Word List</h3>
+        <button 
+          onClick={selectRandomWord}
+          disabled={isGameActive}
+          className="random-word-btn"
+        >
+          Select Random Word
+        </button>
+      </div>
+      
+      <div className="search-container">
         <input
           type="text"
           placeholder="Search words..."
@@ -115,8 +140,8 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
           className="search-input"
         />
       </div>
-      
-      <div className="word-list">
+
+      <div className="word-list-container">
         {filteredWords.map((word, index) => (
           <div
             key={index}
