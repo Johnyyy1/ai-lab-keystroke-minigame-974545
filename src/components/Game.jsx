@@ -133,6 +133,12 @@ const Game = () => {
     
     // Update current character index
     setCurrentCharIndex(value.length);
+    
+    // Check if test is completed
+    if (value.length === targetText.length && value === targetText) {
+      setIsRunning(false);
+      setTestCompleted(true);
+    }
   };
 
   const resetTest = () => {
