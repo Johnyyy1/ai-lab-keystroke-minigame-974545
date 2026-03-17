@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { create } from 'zustand';
-import { Provider } from 'zustand';
 import './Game.css';
 
 const useGameStore = create((set) => ({
@@ -245,15 +244,15 @@ const Game = () => {
       
       <div className="controls">
         {testCompleted ? (
-          <button onClick={startTest} className="btn btn-primary">
-            Start New Test
+          <button onClick={startTest} className="btn">
+            New Test
           </button>
         ) : (
-          <button onClick={startTest} className="btn btn-primary">
+          <button onClick={startTest} className="btn">
             Start Test
           </button>
         )}
-        <button onClick={resetTest} className="btn btn-secondary">
+        <button onClick={resetTest} className="btn">
           Reset
         </button>
       </div>
