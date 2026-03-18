@@ -217,60 +217,53 @@ const Game = () => {
     
     // Update current character index
     setCurrentCharIndex(value.length);
-    
-    // Check if test is completed
-    if (value.length === targetText.length && value === targetText) {
-      setIsRunning(false);
-      setTestCompleted(true);
-    }
   };
 
   const resetTest = () => {
     resetStore();
   };
 
-  const getCharacterClass = (index) => {
-    if (index < userInput.length) {
-      return userInput[index] === targetText[index] ? 'correct' : 'incorrect';
-    } else if (index === currentCharIndex) {
-      return 'cursor';
+  const handleKeyDown = (e) => {
+    if (e.key === 'Backspace' && userInput.length > 0) {
+      const newInput = userInput.slice(0, -1);
+      setUserInput(newInput);
+      setCurrentCharIndex(newInput.length);
     }
-    return '';
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!isRunning && !testCompleted) return;
-      
-      if (e.key === 'Backspace' && userInput.length > 0) {
-        setUserInput(prev => prev.slice(0, -1));
-        setCurrentCharIndex(prev => Math.max(0, prev - 1));
-      }
-    };
+  const getCharacterClass = (index) => {
+    if (index < currentCharIndex) {
+      return 'correct';
+    } else if (index === currentCharIndex) {
+      return 'cursor';
+    } else {
+      return 'untyped';
+    }
+  };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [userInput, isRunning, testCompleted]);
+  const getCharacterClassForDisplay = (index) => {
+    if (index < currentCharIndex) {
+      return 'correct';
+    } else if (index === currentCharIndex) {
+      return 'cursor';
+    } else {
+      return 'untyped';
+    }
+  };
 
   return (
-    <div className="game">
-      <h1>Typing Speed Test</h1>
-      <div className="stats">
-        <div className="stat">Time: <span className={timeLeft <= 10 ? 'warning' : ''}>{timeLeft}s</span></div>
-        <div className="stat">WPM: {wpm}</div>
-        <div className="stat">Accuracy: {accuracy}%</div>
-        <div className="stat">Errors: {errors}</div>
+    <div className="game-container">
+      <div className="game-header">
+        <h1>Typing Speed Test</h1>
       </div>
       
-      <div className="content-wrapper">
-        <div className="main-content">
+      <div className="game-content">
+        <div className="main-area">
           <div className="text-display">
             {targetText.split('').map((char, index) => (
               <span 
                 key={index} 
-                className={index < userInput.length ? 
-                  (char === userInput[index] ? 'correct' : 'incorrect') : 
-                  (index === currentCharIndex ? 'cursor' : '')}
+                className={getCharacterClassForDisplay(index)}
               >
                 {char}
               </span>
@@ -281,6 +274,8 @@ const Game = () => {
             ref={inputRef}
             value={userInput}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onSelect={getCursorPosition}
             className="input-area"
             placeholder="Start typing here..."
             disabled={!isRunning && !testCompleted}

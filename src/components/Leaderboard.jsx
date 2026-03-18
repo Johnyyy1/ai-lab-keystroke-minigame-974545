@@ -18,8 +18,9 @@ const Leaderboard = () => {
           return;
         }
 
-        // Fetch from API
-        const response = await fetch('/api/scores');
+        // Fetch from API with environment variable
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await fetch(`${apiUrl}/api/scores`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
