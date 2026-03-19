@@ -1,4 +1,4 @@
-export const ACHIEVEMENTS = [
+export const BADGES = [
   {
     id: 'first-word',
     title: 'First Word',
@@ -115,7 +115,7 @@ export const ACHIEVEMENTS = [
   }
 ];
 
-export const ACHIEVEMENT_CATEGORIES = [
+export const BADGE_CATEGORIES = [
   { id: 'progress', name: 'Progress', icon: '📈' },
   { id: 'speed', name: 'Speed', icon: '⚡' },
   { id: 'accuracy', name: 'Accuracy', icon: '🎯' },

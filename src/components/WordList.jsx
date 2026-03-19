@@ -78,7 +78,8 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
     'font-stretch', 'font-style', 'font-variant', 'font-weight', 'font-size',
     'font-family', 'font', 'font-size-adjust', 'font-kerning', 'font-feature-settings',
     'font-variation-settings', 'font-language-override', 'font-optical-sizing',
-    'font-palette', 'font-display', 'font-face', 'src', 'format', 'unicode-range'
+    'font-palette', 'font-display', 'font-face', 'src', 'format',
+    'unicode-range'
   ];
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = words.filter(word => 
+      const filtered = words.filter(word =>
         word.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredWords(filtered);
@@ -97,34 +98,26 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
     }
   }, [searchTerm, words]);
 
-  const handleWordSelect = (word) => {
+  const selectRandomWord = () => {
+    if (words.length > 0 && !isGameActive) {
+      const randomIndex = Math.floor(Math.random() * words.length);
+      onWordSelect(words[randomIndex]);
+    }
+  };
+
+  const handleWordClick = (word) => {
     if (!isGameActive) {
       onWordSelect(word);
-    }
-  };
-
-  const getRandomWord = () => {
-    if (filteredWords.length > 0) {
-      const randomIndex = Math.floor(Math.random() * filteredWords.length);
-      return filteredWords[randomIndex];
-    }
-    return null;
-  };
-
-  const selectRandomWord = () => {
-    const randomWord = getRandomWord();
-    if (randomWord) {
-      onWordSelect(randomWord);
     }
   };
 
   return (
     <div className="word-list">
       <div className="word-list-header">
-        <h3>Word List</h3>
+        <h2>Word List</h2>
         <button 
           onClick={selectRandomWord}
-          disabled={isGameActive}
+          disabled={isGameActive || words.length === 0}
           className="random-word-btn"
         >
           Select Random Word
@@ -145,7 +138,7 @@ const WordList = ({ onWordSelect, selectedWord, isGameActive }) => {
         {filteredWords.map((word, index) => (
           <div
             key={index}
-            onClick={() => handleWordSelect(word)}
+            onClick={() => handleWordClick(word)}
             className={`word-item ${
               selectedWord === word ? 'selected' : ''
             } ${isGameActive ? 'disabled' : ''}`}
