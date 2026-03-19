@@ -1,5 +1,5 @@
 import React from 'react';
-import './Badges.css';
+import '../styles/Badges.css';
 
 const Badges = ({ badges, achievements }) => {
   const badgeTypes = {

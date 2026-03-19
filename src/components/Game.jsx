@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { create } from 'zustand';
-import './Game.css';
+import '../styles/Game.css';
 
 const useGameStore = create((set) => ({
   userInput: '',
@@ -229,6 +229,10 @@ const Game = () => {
       setUserInput(newInput);
       setCurrentCharIndex(newInput.length);
     }
+  };
+
+  const getCursorPosition = (e) => {
+    setCurrentCharIndex(e.target.selectionStart ?? 0);
   };
 
   const getCharacterClass = (index) => {
